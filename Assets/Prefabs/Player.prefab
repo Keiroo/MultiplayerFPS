@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 4585591749421100}
   - component: {fileID: 114040255767514414}
   - component: {fileID: 54834759636846004}
+  - component: {fileID: 114797601914559912}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -129,7 +130,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1097745319969182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4313733294367936}
@@ -317,6 +318,38 @@ MonoBehaviour:
   cam: {fileID: 20270481772004540}
   movSpeed: 10
   mouseSensitivity: 3
+--- !u!114 &114797601914559912
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1097745319969182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 26
+    i1: 192
+    i2: 97
+    i3: 230
+    i4: 129
+    i5: 179
+    i6: 101
+    i7: 4
+    i8: 58
+    i9: 218
+    i10: 19
+    i11: 93
+    i12: 226
+    i13: 125
+    i14: 84
+    i15: 225
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!124 &124879679101729406
 Behaviour:
   m_ObjectHideFlags: 1
