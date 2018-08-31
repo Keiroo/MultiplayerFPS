@@ -321,8 +321,10 @@ MonoBehaviour:
   cam: {fileID: 20270481772004540}
   movSpeed: 15
   mouseSensitivity: 3
-  jumpHeight: 60
-  jumpForce: 5
+  jumpHeight: 12
+  jumpForce: 8
+  airVelocityForce: 3
+  upAirVelocityForce: 3
 --- !u!114 &114354500472646978
 MonoBehaviour:
   m_ObjectHideFlags: 1
