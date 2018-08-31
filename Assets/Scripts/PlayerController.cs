@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour {
         // Apply jump
         if (jumpVector != Vector3.zero)
         {
-            rb.AddForce(jumpVector * jumpForce, ForceMode.VelocityChange);            
+            rb.AddForce(jumpVector * jumpForce, ForceMode.Impulse);            
         }
     }
 
