@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float jumpForce = 1f;
     [SerializeField]
+    private float jumpCooldown = 1f;
+    [SerializeField]
     private float airVelocityForce = 1f;
     [SerializeField]
     private float upAirVelocityForce = 1f;
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody rb;
     private bool isGrounded;
     private bool jumpedWithoutVelocity;
+    private float jumpCooldownTimer = 0f;
 
     private void Start()
     {
@@ -38,6 +41,10 @@ public class PlayerController : MonoBehaviour {
         gameObject.transform.rotation = Quaternion.Euler(
             new Vector3(0, gameObject.transform.rotation.eulerAngles.y, 0));
 
+        // Cooldown timer
+        if (isGrounded) jumpCooldownTimer += Time.deltaTime;
+
+        // Get movement
         float movX = Input.GetAxisRaw("Horizontal");
         float movY = Input.GetAxisRaw("Vertical");
         float rotY = Input.GetAxisRaw("Mouse X");
@@ -61,7 +68,7 @@ public class PlayerController : MonoBehaviour {
         camRotation = new Vector3(rotX, 0f, 0f) * mouseSensitivity;
 
         // Calculate jump vector
-        if (Input.GetButton("Jump") && isGrounded)
+        if (Input.GetButton("Jump") && isGrounded && jumpCooldownTimer >= jumpCooldown)
         {
             if (velocity == Vector3.zero)
             {
@@ -122,6 +129,15 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
+        }
+    }
+
+    // Reset timer when hitting ground
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            jumpCooldownTimer = 0f;
         }
     }
 }

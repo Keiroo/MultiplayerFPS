@@ -323,6 +323,7 @@ MonoBehaviour:
   mouseSensitivity: 3
   jumpHeight: 12
   jumpForce: 8
+  jumpCooldown: 0.2
   airVelocityForce: 3
   upAirVelocityForce: 3
 --- !u!114 &114354500472646978
