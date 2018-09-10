@@ -86,7 +86,13 @@ public class PlayerController : MonoBehaviour {
 
         // If in air, weaken the move force
         if (!isGrounded)
-            airVelocity = (vecHorizontal + vecVertical).normalized * (movSpeed / 5.0f);
+        {
+            airVelocity = ((vecHorizontal + vecVertical).normalized * (movSpeed / 5.0f)).normalized;
+
+            // Disable moving in the jump direction
+
+        }
+        else airVelocity = Vector3.zero;
     }
 
     private void FixedUpdate()

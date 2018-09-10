@@ -324,8 +324,8 @@ MonoBehaviour:
   jumpHeight: 12
   jumpForce: 8
   jumpCooldown: 0.2
-  airVelocityForce: 3
-  upAirVelocityForce: 3
+  airVelocityForce: 8
+  upAirVelocityForce: 8
 --- !u!114 &114354500472646978
 MonoBehaviour:
   m_ObjectHideFlags: 1
