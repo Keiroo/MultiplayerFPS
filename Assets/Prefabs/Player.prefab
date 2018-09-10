@@ -321,6 +321,7 @@ MonoBehaviour:
   cam: {fileID: 20270481772004540}
   movSpeed: 15
   mouseSensitivity: 3
+  maxCameraAngle: 85
   jumpHeight: 12
   jumpForce: 8
   jumpCooldown: 0.2

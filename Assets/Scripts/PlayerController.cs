@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float mouseSensitivity = 3f;
     [SerializeField]
+    private float maxCameraAngle = 89f;
+    [SerializeField]
     private float jumpHeight = 1f;
     [SerializeField]
     private float jumpForce = 1f;
@@ -22,7 +24,7 @@ public class PlayerController : MonoBehaviour {
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
-    private Vector3 camRotation = Vector3.zero;
+    private float camRotation = 0f;
     private Vector3 jumpVector = Vector3.zero;
     private Vector3 airVelocity = Vector3.zero;
     private Rigidbody rb;
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour {
     private bool jumpedWithoutVelocity;
     private float jumpCooldownTimer = 0f;
     private Vector3 lastJumpVector = Vector3.zero;
+    private float currCamRotation = 0f;
 
     private void Start()
     {
@@ -66,7 +69,7 @@ public class PlayerController : MonoBehaviour {
         }
         
         rotation = new Vector3(0f, rotY, 0f) * mouseSensitivity;
-        camRotation = new Vector3(rotX, 0f, 0f) * mouseSensitivity;
+        camRotation = rotX * mouseSensitivity;
 
         // Calculate jump vector
         if (Input.GetButton("Jump") && isGrounded && jumpCooldownTimer >= jumpCooldown)
@@ -141,7 +144,9 @@ public class PlayerController : MonoBehaviour {
 
         if (cam != null)
         {
-            cam.transform.Rotate(-camRotation);
+            currCamRotation -= camRotation;
+            currCamRotation = Mathf.Clamp(currCamRotation, -maxCameraAngle, maxCameraAngle);
+            cam.transform.localEulerAngles = new Vector3(currCamRotation, 0f, 0f);
         }
 
         // Apply jump
