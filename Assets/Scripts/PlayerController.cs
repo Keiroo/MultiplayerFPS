@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     private bool isGrounded;
     private bool jumpedWithoutVelocity;
     private float jumpCooldownTimer = 0f;
+    private Vector3 lastJumpVector = Vector3.zero;
 
     private void Start()
     {
@@ -81,16 +82,46 @@ public class PlayerController : MonoBehaviour {
                 jumpVector = ((Vector3.up * jumpHeight) + velocity).normalized;
             }
             isGrounded = false;
+
+            lastJumpVector = jumpVector;
         }
         else jumpVector = Vector3.zero;
 
         // If in air, weaken the move force
         if (!isGrounded)
         {
+            // Calculate basic velocity
             airVelocity = ((vecHorizontal + vecVertical).normalized * (movSpeed / 5.0f)).normalized;
 
             // Disable moving in the jump direction
+            if (!jumpedWithoutVelocity)
+            {
+                // Check if player move in jump direction
+                float angle = Vector3.Angle(new Vector3(lastJumpVector.x, 0, lastJumpVector.z), airVelocity);
+                if (angle < 90)
+                {
+                    // Calculate rotation direction from jump vector
+                    Vector3 vectorLeft = Quaternion.Euler(0f, -90f, 0f) * lastJumpVector;
+                    Vector3 vectorRight = Quaternion.Euler(0f, 90f, 0f) * lastJumpVector;
 
+                    float angleLeft = Vector3.SignedAngle(new Vector3(vectorLeft.x, 0, vectorLeft.z), airVelocity, Vector3.up);
+                    float angleRight = Vector3.SignedAngle(new Vector3(vectorRight.x, 0, vectorRight.z), airVelocity, Vector3.up);
+
+                    // Rotate vector and calculate length of vector by angle:
+                    // [90,0] == [0,1]
+                    if (Mathf.Abs(angleLeft) < Mathf.Abs(angleRight))
+                    {
+                        airVelocity = Quaternion.Euler(0f, -angleLeft, 0f) * airVelocity;
+                        airVelocity *= CalcVectorLength(angleLeft);
+                    }
+                    else if (Mathf.Abs(angleLeft) > Mathf.Abs(angleRight))
+                    {
+                        airVelocity = Quaternion.Euler(0f, -angleRight, 0f) * airVelocity;
+                        airVelocity *= CalcVectorLength(angleRight);
+                    }
+                    else airVelocity = Vector3.zero;
+                }                
+            }
         }
         else airVelocity = Vector3.zero;
     }
@@ -145,5 +176,10 @@ public class PlayerController : MonoBehaviour {
         {
             jumpCooldownTimer = 0f;
         }
+    }
+
+    private float CalcVectorLength(float angle)
+    {
+        return 1 - (Mathf.Abs(angle) / 90f);
     }
 }
