@@ -12,16 +12,16 @@ public class SwingOnObject : MonoBehaviour {
     [SerializeField]
     private float pullMinDistance = 1f;
     [SerializeField]
-    private float pullMaxDistanceTolerance = 0.9f;
+    private float velocityChangeForce = 0.1f;
     [SerializeField]
-    private float velocityChangeForce = 1f;
+    private float maxVelocityMagnitude = 100f;
 
     private Rigidbody rb;
     private bool rayVisible = false;
     private Vector3 swingObjectPos = Vector3.zero;
     private bool playerHooked = false;
     private Vector3 pullVector = Vector3.zero;
-    private float pullMaxDistance = 0f;
+    private float velocityMagnitude = 0f;
 
     private void Start()
     {
@@ -55,9 +55,24 @@ public class SwingOnObject : MonoBehaviour {
                         if (!playerHooked)
                         {
                             playerHooked = true;
-                            pullVector = (swingObjectPos - transform.position).normalized;
+
+                            // Calculate pull vector and current velocity magnitude
+                            pullVector = (swingObjectPos - transform.position);
+                            velocityMagnitude = Vector3.Magnitude(rb.velocity);
+
+                            // Apply new velocity vector and normalize pull vector
+                            // for future calculations
                             rb.velocity = pullVector * velocityChangeForce;
-                            pullMaxDistance = Vector3.Distance(transform.position, swingObjectPos);
+                            pullVector = pullVector.normalized;
+
+                            // If old magnitude is greater, apply it to new vector
+                            float magnitude = Vector3.Magnitude(rb.velocity);
+                            if (velocityMagnitude > magnitude)
+                            {
+                                // Check if new magnitude isn't exceeding max magnitude
+                                if (velocityMagnitude < maxVelocityMagnitude)
+                                    rb.velocity = rb.velocity.normalized * velocityMagnitude;
+                            }
                         }
                     }
                 }
@@ -81,7 +96,6 @@ public class SwingOnObject : MonoBehaviour {
                 playerHooked = false;
                 rayVisible = false;
             }
-            Debug.Log(distance);
         }
     }
 
