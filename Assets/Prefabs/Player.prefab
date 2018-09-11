@@ -376,6 +376,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 20270481772004540}
+  pullForce: 1
+  pullMinDistance: 8
 --- !u!114 &114797601914559912
 MonoBehaviour:
   m_ObjectHideFlags: 1
