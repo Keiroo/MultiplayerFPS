@@ -378,6 +378,8 @@ MonoBehaviour:
   cam: {fileID: 20270481772004540}
   pullForce: 1
   pullMinDistance: 8
+  pullMaxDistanceTolerance: 0.9
+  velocityChangeForce: 10
 --- !u!114 &114797601914559912
 MonoBehaviour:
   m_ObjectHideFlags: 1

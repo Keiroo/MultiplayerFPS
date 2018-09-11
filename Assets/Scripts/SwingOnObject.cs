@@ -12,13 +12,16 @@ public class SwingOnObject : MonoBehaviour {
     [SerializeField]
     private float pullMinDistance = 1f;
     [SerializeField]
+    private float pullMaxDistanceTolerance = 0.9f;
+    [SerializeField]
     private float velocityChangeForce = 1f;
 
     private Rigidbody rb;
     private bool rayVisible = false;
     private Vector3 swingObjectPos = Vector3.zero;
     private bool playerHooked = false;
-    Vector3 pullVector = Vector3.zero;
+    private Vector3 pullVector = Vector3.zero;
+    private float pullMaxDistance = 0f;
 
     private void Start()
     {
@@ -52,8 +55,9 @@ public class SwingOnObject : MonoBehaviour {
                         if (!playerHooked)
                         {
                             playerHooked = true;
-                            pullVector = (swingObjectPos - transform.position).normalized;                            
-                            rb.velocity = pullVector * velocityChangeForce;                            
+                            pullVector = (swingObjectPos - transform.position).normalized;
+                            rb.velocity = pullVector * velocityChangeForce;
+                            pullMaxDistance = Vector3.Distance(transform.position, swingObjectPos);
                         }
                     }
                 }
