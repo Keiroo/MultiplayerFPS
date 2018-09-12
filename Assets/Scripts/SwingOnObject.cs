@@ -15,6 +15,8 @@ public class SwingOnObject : MonoBehaviour {
     private float velocityChangeForce = 0.1f;
     [SerializeField]
     private float maxVelocityMagnitude = 100f;
+    [SerializeField]
+    private float maxHookDistance = 100f;
 
     private Rigidbody rb;
     private bool rayVisible = false;
@@ -57,25 +59,28 @@ public class SwingOnObject : MonoBehaviour {
                             playerHooked = true;
 
                             // Calculate pull vector and current velocity magnitude
-                            pullVector = (swingObjectPos - transform.position);
+                            pullVector = (swingObjectPos - transform.position) * velocityChangeForce;
                             velocityMagnitude = Vector3.Magnitude(rb.velocity);
+
+                            // If old magnitude is greater, apply it to new vector
+                            float magnitude = Vector3.Magnitude(pullVector);
+                            if (velocityMagnitude > magnitude)
+                                pullVector = pullVector.normalized * velocityMagnitude;
+
+                            // Check if new magnitude isn't exceeding max magnitude
+                            magnitude = Vector3.Magnitude(pullVector);
+                            if (magnitude > maxVelocityMagnitude)
+                                pullVector = pullVector.normalized * maxVelocityMagnitude;
+
 
                             // Apply new velocity vector and normalize pull vector
                             // for future calculations
-                            rb.velocity = pullVector * velocityChangeForce;
+                            rb.velocity = pullVector;
                             pullVector = pullVector.normalized;
-
-                            // If old magnitude is greater, apply it to new vector
-                            float magnitude = Vector3.Magnitude(rb.velocity);
-                            if (velocityMagnitude > magnitude)
-                            {
-                                // Check if new magnitude isn't exceeding max magnitude
-                                if (velocityMagnitude < maxVelocityMagnitude)
-                                    rb.velocity = rb.velocity.normalized * velocityMagnitude;
-                            }
                         }
                     }
                 }
+                Debug.Log(Vector3.Distance(swingObjectPos, transform.position));
             }
         }
 
@@ -88,8 +93,6 @@ public class SwingOnObject : MonoBehaviour {
         // Pull player until he reaches min. distance to object
         if (playerHooked)
         {
-            
-            pullVector = (swingObjectPos - transform.position).normalized;
             float distance = Vector3.Distance(transform.position, swingObjectPos);
             if (distance < pullMinDistance)
             {
@@ -104,6 +107,14 @@ public class SwingOnObject : MonoBehaviour {
         if (playerHooked)
         {
             rb.AddForce(pullVector * pullForce, ForceMode.VelocityChange);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            velocityMagnitude = 0f;
         }
     }
 }
