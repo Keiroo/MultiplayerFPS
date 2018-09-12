@@ -377,9 +377,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 20270481772004540}
   pullForce: 1
-  pullMinDistance: 10
+  pullMinDistance: 4
   velocityChangeForce: 0.5
-  maxVelocityMagnitude: 100
+  maxVelocityMagnitude: 50
+  maxHookDistance: 30
 --- !u!114 &114797601914559912
 MonoBehaviour:
   m_ObjectHideFlags: 1

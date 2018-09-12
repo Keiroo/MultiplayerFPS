@@ -19,6 +19,7 @@ public class SwingOnObject : MonoBehaviour {
     private float maxHookDistance = 100f;
 
     private Rigidbody rb;
+    private Transform camTrans;
     private bool rayVisible = false;
     private Vector3 swingObjectPos = Vector3.zero;
     private bool playerHooked = false;
@@ -28,6 +29,7 @@ public class SwingOnObject : MonoBehaviour {
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        camTrans = cam.transform;
     }
 
     private void Update ()
@@ -43,10 +45,10 @@ public class SwingOnObject : MonoBehaviour {
             }
             else
             {
-                Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+                //Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));                
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(camTrans.position, camTrans.forward, out hit, maxHookDistance))
                 {
                     if (hit.collider.gameObject.tag == "SwingObject")
                     {
