@@ -17,6 +17,8 @@ public class SwingOnObject : MonoBehaviour {
     private float maxVelocityMagnitude = 100f;
     [SerializeField]
     private float maxHookDistance = 100f;
+    [SerializeField]
+    private float maxPlayerSpeed = 100f;
 
     private Rigidbody rb;
     private Transform camTrans;
@@ -40,8 +42,7 @@ public class SwingOnObject : MonoBehaviour {
         {
             if (rayVisible)
             {
-                rayVisible = false;
-                playerHooked = false;
+                CutHook();
             }
             else
             {
@@ -59,30 +60,11 @@ public class SwingOnObject : MonoBehaviour {
                         if (!playerHooked)
                         {
                             playerHooked = true;
-
-                            // Calculate pull vector and current velocity magnitude
-                            pullVector = (swingObjectPos - transform.position) * velocityChangeForce;
-                            velocityMagnitude = Vector3.Magnitude(rb.velocity);
-
-                            // If old magnitude is greater, apply it to new vector
-                            float magnitude = Vector3.Magnitude(pullVector);
-                            if (velocityMagnitude > magnitude)
-                                pullVector = pullVector.normalized * velocityMagnitude;
-
-                            // Check if new magnitude isn't exceeding max magnitude
-                            magnitude = Vector3.Magnitude(pullVector);
-                            if (magnitude > maxVelocityMagnitude)
-                                pullVector = pullVector.normalized * maxVelocityMagnitude;
-
-
-                            // Apply new velocity vector and normalize pull vector
-                            // for future calculations
-                            rb.velocity = pullVector;
-                            pullVector = pullVector.normalized;
+                            Pull();
                         }
+                        Debug.Log(Vector3.Magnitude(rb.velocity));
                     }
                 }
-                Debug.Log(Vector3.Distance(swingObjectPos, transform.position));
             }
         }
 
@@ -95,12 +77,7 @@ public class SwingOnObject : MonoBehaviour {
         // Pull player until he reaches min. distance to object
         if (playerHooked)
         {
-            float distance = Vector3.Distance(transform.position, swingObjectPos);
-            if (distance < pullMinDistance)
-            {
-                playerHooked = false;
-                rayVisible = false;
-            }
+            CutHookByMinDistance();
         }
     }
 
@@ -110,13 +87,60 @@ public class SwingOnObject : MonoBehaviour {
         {
             rb.AddForce(pullVector * pullForce, ForceMode.VelocityChange);
         }
+
+        // Constaint max player speed
+        if (Vector3.Magnitude(rb.velocity) > maxPlayerSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxPlayerSpeed;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Reset saved velocity magnitude and
+        // and cut hook when hit ground
         if (collision.gameObject.tag == "Ground")
         {
             velocityMagnitude = 0f;
+            CutHook();
         }
+    }
+
+    private void Pull()
+    {
+        // Calculate pull vector and current velocity magnitude
+        pullVector = (swingObjectPos - transform.position) * velocityChangeForce;
+        velocityMagnitude = Vector3.Magnitude(rb.velocity);
+
+        // If old magnitude is greater, apply it to new vector
+        float magnitude = Vector3.Magnitude(pullVector);
+        if (velocityMagnitude > magnitude)
+            pullVector = pullVector.normalized * velocityMagnitude;
+
+        // Check if new magnitude isn't exceeding max magnitude
+        magnitude = Vector3.Magnitude(pullVector);
+        if (magnitude > maxVelocityMagnitude)
+            pullVector = pullVector.normalized * maxVelocityMagnitude;
+
+        // Apply new velocity vector and normalize pull vector
+        // for future calculations
+        rb.velocity = pullVector;
+    }
+
+    private void CutHookByMinDistance()
+    {
+        // Recalculate pull vector (for better pull precision)
+        pullVector = (swingObjectPos - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, swingObjectPos);
+        if (distance < pullMinDistance)
+        {
+            CutHook();
+        }
+    }
+
+    private void CutHook()
+    {
+        rayVisible = false;
+        playerHooked = false;
     }
 }
