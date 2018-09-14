@@ -13,8 +13,11 @@ public class Shotgun : NetworkBehaviour {
     private float range = 20f;
     [SerializeField]
     private float shootPower = 1f;
+    [SerializeField]
+    private float shootCooldown = 1f;
 
     private Transform camTrans;
+    private float CDTimer = 0f;
 
     private void Start()
     {
@@ -22,12 +25,18 @@ public class Shotgun : NetworkBehaviour {
     }
 
     private void Update()
-    {        
+    {
+        CDTimer += Time.deltaTime;
+
         bool btnPressed = Input.GetButtonDown("Fire1");
 
         if (btnPressed)
         {
-            Shoot();
+            if (CDTimer > shootCooldown)
+            {
+                Shoot();
+                CDTimer = 0f;
+            }                
         }
     }    
 
@@ -43,7 +52,7 @@ public class Shotgun : NetworkBehaviour {
                 Debug.Log(target.name + " found");
                 CmdShoot(target.name);
             }
-        }
+        }        
     }
 
     [Command]

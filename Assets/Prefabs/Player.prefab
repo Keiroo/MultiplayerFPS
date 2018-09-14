@@ -421,7 +421,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   range: 20
-  shootPower: 10
+  shootPower: 30
+  shootCooldown: 1
 --- !u!114 &114833218113557316
 MonoBehaviour:
   m_ObjectHideFlags: 1
