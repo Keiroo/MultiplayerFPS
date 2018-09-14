@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 20270481772004540}
   - component: {fileID: 124879679101729406}
   - component: {fileID: 81442496772645454}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -45,7 +45,9 @@ GameObject:
   - component: {fileID: 114912036837879688}
   - component: {fileID: 114748705864244028}
   - component: {fileID: 65480009809385168}
-  m_Layer: 0
+  - component: {fileID: 114802540733532566}
+  - component: {fileID: 114833218113557316}
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -62,7 +64,7 @@ GameObject:
   - component: {fileID: 4313733294367936}
   - component: {fileID: 33429129090261196}
   - component: {fileID: 23827490829364644}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,8 +81,7 @@ GameObject:
   - component: {fileID: 4549004149484920}
   - component: {fileID: 33439925302335014}
   - component: {fileID: 23322796446414290}
-  - component: {fileID: 114622163990526736}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,20 +338,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 10
   m_InterpolateMovement: 1
---- !u!114 &114622163990526736
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1879979401999754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bec6b293ad683e4d82a4d23ebbc19af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 20270481772004540}
-  range: 20
-  shootPower: 100
 --- !u!114 &114644409676982420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -367,7 +354,7 @@ MonoBehaviour:
   - {fileID: 20270481772004540}
   - {fileID: 81442496772645454}
   - {fileID: 114748705864244028}
-  - {fileID: 114622163990526736}
+  - {fileID: 114802540733532566}
 --- !u!114 &114748705864244028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -418,6 +405,34 @@ MonoBehaviour:
     i15: 225
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114802540733532566
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1097745319969182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bec6b293ad683e4d82a4d23ebbc19af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 20270481772004540}
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
+  range: 20
+  shootPower: 10
+--- !u!114 &114833218113557316
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1097745319969182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f25b98f37255b45817015109f42e1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114912036837879688
 MonoBehaviour:
   m_ObjectHideFlags: 1
