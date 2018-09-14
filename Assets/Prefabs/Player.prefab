@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 114354500472646978}
   - component: {fileID: 114912036837879688}
   - component: {fileID: 114748705864244028}
+  - component: {fileID: 65480009809385168}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -61,7 +62,6 @@ GameObject:
   - component: {fileID: 4313733294367936}
   - component: {fileID: 33429129090261196}
   - component: {fileID: 23827490829364644}
-  - component: {fileID: 65085228699970264}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -79,9 +79,9 @@ GameObject:
   - component: {fileID: 4549004149484920}
   - component: {fileID: 33439925302335014}
   - component: {fileID: 23322796446414290}
-  - component: {fileID: 65884288653118532}
+  - component: {fileID: 114622163990526736}
   m_Layer: 0
-  m_Name: Weapon
+  m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,29 +277,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!65 &65085228699970264
+--- !u!65 &65480009809385168
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1828704395553848}
+  m_GameObject: {fileID: 1097745319969182}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65884288653118532
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1879979401999754}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!81 &81442496772645454
 AudioListener:
@@ -349,6 +337,20 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 10
   m_InterpolateMovement: 1
+--- !u!114 &114622163990526736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1879979401999754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bec6b293ad683e4d82a4d23ebbc19af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 20270481772004540}
+  range: 20
+  shootPower: 100
 --- !u!114 &114644409676982420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -364,6 +366,8 @@ MonoBehaviour:
   - {fileID: 114040255767514414}
   - {fileID: 20270481772004540}
   - {fileID: 81442496772645454}
+  - {fileID: 114748705864244028}
+  - {fileID: 114622163990526736}
 --- !u!114 &114748705864244028
 MonoBehaviour:
   m_ObjectHideFlags: 1
