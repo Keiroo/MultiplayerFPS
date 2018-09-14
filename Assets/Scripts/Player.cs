@@ -23,11 +23,11 @@ public class Player : NetworkBehaviour {
         {
             Debug.Log("Adding force to " + gameObject.name);
             Debug.Log(shootVector);
-            rb.AddForce(shootVector * shootPower, ForceMode.VelocityChange);
+            RpcAddForce(shootVector * shootPower, ForceMode.VelocityChange);
             Debug.Log(rb.velocity);
             ResetValues();
         }
-    }
+    }    
 
     public void GetShot(Vector3 shootVector, float shootPower)
     {
@@ -35,6 +35,12 @@ public class Player : NetworkBehaviour {
         this.shootVector = shootVector;
         this.shootPower = shootPower;
         gotShot = true;
+    }
+
+    [ClientRpc]
+    public void RpcAddForce(Vector3 force, ForceMode mode)
+    {
+        rb.AddForce(force, mode);
     }
 
     private void ResetValues()

@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
 
     private void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(200, 10, 200, 500));
+        GUILayout.BeginArea(new Rect(300, 10, 200, 500));
         GUILayout.BeginVertical();
         foreach(string playerID in players.Keys)
         {
