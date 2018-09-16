@@ -51,8 +51,8 @@ public class PlayerController : MonoBehaviour {
         if (isGrounded) jumpCooldownTimer += Time.deltaTime;
 
         // Get movement
-        float movX = Input.GetAxisRaw("Horizontal");
-        float movY = Input.GetAxisRaw("Vertical");
+        float movX = Input.GetAxis("Horizontal");
+        float movY = Input.GetAxis("Vertical");
         float rotY = Input.GetAxisRaw("Mouse X");
         float rotX = Input.GetAxisRaw("Mouse Y");
 
@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour {
         // Check if player is on the ground
         if (isGrounded)
         {
-            velocity = (vecHorizontal + vecVertical).normalized * movSpeed;
+            velocity = (vecHorizontal + vecVertical) * movSpeed;
         }
         else
         {
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour {
             else
             {
                 jumpedWithoutVelocity = false;
-                jumpVector = ((Vector3.up * jumpHeight) + velocity).normalized;
+                jumpVector = ((Vector3.up * jumpHeight) + (velocity.normalized * movSpeed)).normalized;
             }
             isGrounded = false;
 

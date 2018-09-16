@@ -419,7 +419,7 @@ MonoBehaviour:
   cam: {fileID: 20270481772004540}
   mask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 4294966783
   range: 20
   shootPower: 30
   shootCooldown: 1
