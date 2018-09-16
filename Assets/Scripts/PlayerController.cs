@@ -185,6 +185,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void OnDisable()
+    {
+        // Unlock cursor when disconnecting
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     private float CalcVectorLength(float angle)
     {
         return 1 - (Mathf.Abs(angle) / 90f);
