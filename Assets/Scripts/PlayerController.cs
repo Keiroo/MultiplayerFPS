@@ -168,6 +168,11 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void PlayerInAir()
+    {
+        isGrounded = false;
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")

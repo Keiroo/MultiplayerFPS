@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(Rigidbody))]
 public class SwingOnObject : MonoBehaviour {
 
@@ -22,6 +23,7 @@ public class SwingOnObject : MonoBehaviour {
 
     private Rigidbody rb;
     private Transform camTrans;
+    private PlayerController pc;
     private bool rayVisible = false;
     private Vector3 swingObjectPos = Vector3.zero;
     private bool playerHooked = false;
@@ -32,6 +34,7 @@ public class SwingOnObject : MonoBehaviour {
     {
         rb = GetComponent<Rigidbody>();
         camTrans = cam.transform;
+        pc = GetComponent<PlayerController>();
     }
 
     private void Update ()
@@ -46,7 +49,6 @@ public class SwingOnObject : MonoBehaviour {
             }
             else
             {
-                //Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));                
                 RaycastHit hit;
 
                 if (Physics.Raycast(camTrans.position, camTrans.forward, out hit, maxHookDistance))
@@ -108,6 +110,9 @@ public class SwingOnObject : MonoBehaviour {
 
     private void Pull()
     {
+        // Tell PlayerController that player is in air
+        pc.PlayerInAir();
+
         // Calculate pull vector and current velocity magnitude
         pullVector = (swingObjectPos - transform.position) * velocityChangeForce;
         velocityMagnitude = Vector3.Magnitude(rb.velocity);
