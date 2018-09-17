@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 434746094}
   - component: {fileID: 434746095}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: VolumeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2152,9 +2152,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resDropdown: {fileID: 534375063}
+  fullscreenToggle: {fileID: 2054908141}
   sensSlider: {fileID: 1573254337}
   sensValue: {fileID: 1340554038}
   audioMixer: {fileID: 24100000, guid: fee7c4859386fe44db1a76ef1eb6b98e, type: 2}
+  volumeSlider: {fileID: 434746095}
 --- !u!1 &1573254335
 GameObject:
   m_ObjectHideFlags: 0
