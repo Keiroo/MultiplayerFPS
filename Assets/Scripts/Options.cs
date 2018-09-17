@@ -9,30 +9,34 @@ public class Options : MonoBehaviour {
     [SerializeField]
     private Dropdown resDropdown;
     [SerializeField]
+    private Toggle fullscreenToggle;
+    [SerializeField]
     private Slider sensSlider;
     [SerializeField]
     private Text sensValue;
     [SerializeField]
     private AudioMixer audioMixer;
+    [SerializeField]
+    private Slider volumeSlider;
 
     private Resolution[] resolutions;
     private int resIndex;
 
     private void Start()
     {
-        SetResolutionsDropdown();
-        SetSlider();
+        LoadSettings();
     }
 
     public void SetResolution(int index)
     {
-        PlayerPrefs.SetFloat("resolution", index);
+        PlayerPrefs.SetInt("resolution", index);
         Resolution res = resolutions[index];
         Screen.SetResolution(res.width, res.height, Screen.fullScreen);
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
+        PlayerPrefs.SetInt("fullscreen", isFullscreen ? 1 : 0);
         Screen.fullScreen = isFullscreen;
     }
 
@@ -44,10 +48,38 @@ public class Options : MonoBehaviour {
 
     public void SetVolume(float volume)
     {
+        PlayerPrefs.SetFloat("volume", volume);
         audioMixer.SetFloat("volume", volume);
     }
 
-    private void SetSlider()
+    private void LoadSettings()
+    {
+        /* Loaded PlayerPrefs:
+        resolution
+        fullscreen
+        mouseSens
+        volume */
+
+        SetResolutionsDropdown();
+        SetFullscreenToggle();
+        SetMouseSensSlider();
+        SetVolumeSlider();
+    }
+
+    private void SetVolumeSlider()
+    {
+        float vol = PlayerPrefs.GetFloat("volume");
+        volumeSlider.value = vol;
+    }
+
+    private void SetFullscreenToggle()
+    {
+        int isFS = PlayerPrefs.GetInt("fullscreen");
+        if (isFS == 1) fullscreenToggle.isOn = true;
+        else fullscreenToggle.isOn = false;
+    }
+
+    private void SetMouseSensSlider()
     {
         float sens = PlayerPrefs.GetFloat("mouseSens");
 
@@ -73,12 +105,10 @@ public class Options : MonoBehaviour {
         {
             string option = resolutions[i].width + "x" + resolutions[i].height;
             options.Add(option);
-
-            //if (resolutions[i].width == Screen.currentResolution.width &&
-            //    resolutions[i].height == Screen.currentResolution.height)
-            //    resIndex = i;
-
+                        
         }
+
+        resIndex = PlayerPrefs.GetInt("resolution");
         resDropdown.AddOptions(options);
         resDropdown.value = resIndex;
         resDropdown.RefreshShownValue();
