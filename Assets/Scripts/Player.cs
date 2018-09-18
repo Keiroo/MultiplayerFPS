@@ -12,6 +12,8 @@ public class Player : NetworkBehaviour {
     private float shootPower = 0f;
     private Rigidbody rb;
     private int points = 0;
+    private GameObject netManager;
+    private List<GameObject> spawnPoints;
 
     public int Points
     {
@@ -24,6 +26,16 @@ public class Player : NetworkBehaviour {
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        netManager = GameManager.Instance.Spawns;
+        spawnPoints = new List<GameObject>();
+        StartCoroutine(LateStart(1f));
+    }
+
+    private void Update()
+    {
+        if (transform.position.y < -10f)
+            ResetPlayerPos();
     }
 
     private void FixedUpdate()
@@ -63,10 +75,61 @@ public class Player : NetworkBehaviour {
         rb.AddForce(force, mode);
     }
 
+    private void ResetPlayerPos()
+    {
+        bool spawnFound = false;
+        int spawnID = 0;
+
+        if (spawnPoints.Count > 0)
+        {
+            Debug.Log("Spawns more than 0");
+            do
+            {
+                spawnID = UnityEngine.Random.Range(0, spawnPoints.Count);
+                spawnFound = true;
+                List<Player> players = GameManager.GetPlayers();
+
+                foreach (Player player in players)
+                {
+                    if (player.transform.position == spawnPoints[spawnID].transform.position)
+                    {
+                        spawnFound = false;
+                    }
+                }
+            } while (!spawnFound);
+        }
+        
+        if (spawnFound)
+        {
+            Debug.Log("Resetting position");
+            rb.velocity = Vector3.zero;
+            transform.position = spawnPoints[spawnID].transform.position;
+        }
+
+    }
+
     private void ResetValues()
     {
         gotShot = false;
         shootVector = Vector3.zero;
         shootPower = 0f;
+    }
+
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        if (netManager != null)
+        {
+            Debug.Log("NM found");
+            foreach (Transform child in netManager.transform)
+            {
+                spawnPoints.Add(child.gameObject);
+            }
+        }
+        else
+        {
+            Debug.Log("NM not found");
+        }
     }
 }

@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
     private int pointsToWin = 100;
     [SerializeField]
     private float pointsGainSpeed = 1f;
+    [SerializeField]
+    private GameObject spawns;
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
     private static GameManager instance;
@@ -38,6 +40,15 @@ public class GameManager : MonoBehaviour {
             return pointsGainSpeed;
         }
     }
+    public GameObject Spawns
+    {
+        get
+        {
+            Debug.Log("Returning NM");
+            Debug.Log(spawns);
+            return spawns;
+        }
+    }
 
     public static void AddPlayer(string netID, Player player)
     {
@@ -49,6 +60,18 @@ public class GameManager : MonoBehaviour {
     public static Player GetPlayerByID(string playerID)
     {
         return players[playerID];
+    }
+
+    public static List<Player> GetPlayers()
+    {
+        List<Player> playersList = new List<Player>();
+
+        foreach (string playerID in players.Keys)
+        {
+            playersList.Add(players[playerID]);
+        }
+
+        return playersList;
     }
 
     public static void DeletePlayer(string playerID)
