@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(Rigidbody))]
 public class SwingOnObject : MonoBehaviour {
@@ -21,9 +22,13 @@ public class SwingOnObject : MonoBehaviour {
     [SerializeField]
     private float maxPlayerSpeed = 100f;
 
+    [SerializeField]
+    private float ropeWidth = 1f;
+
     private Rigidbody rb;
     private Transform camTrans;
     private PlayerController pc;
+    private LineRenderer rope;
     private bool rayVisible = false;
     private Vector3 swingObjectPos = Vector3.zero;
     private bool playerHooked = false;
@@ -35,6 +40,12 @@ public class SwingOnObject : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         camTrans = cam.transform;
         pc = GetComponent<PlayerController>();
+        rope = GetComponent<LineRenderer>();
+
+        // Rope setup
+        rope.enabled = false;
+        rope.startWidth = ropeWidth;
+        rope.endWidth = ropeWidth;
     }
 
     private void Update ()
@@ -80,6 +91,21 @@ public class SwingOnObject : MonoBehaviour {
         if (playerHooked)
         {
             CutHookByMinDistance();
+        }
+
+        // If hooked, draw rope
+        if (playerHooked)
+        {
+            // Check if rope component is enabled and has 2 positions
+            if (!rope.enabled) rope.enabled = true;
+            if (rope.positionCount != 2) rope.positionCount = 2;
+
+            rope.SetPosition(0, transform.position);
+            rope.SetPosition(1, swingObjectPos);            
+        }
+        else
+        {
+            rope.enabled = false;
         }
     }
 
