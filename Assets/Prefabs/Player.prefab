@@ -44,10 +44,10 @@ GameObject:
   - component: {fileID: 114354500472646978}
   - component: {fileID: 114912036837879688}
   - component: {fileID: 114748705864244028}
-  - component: {fileID: 65480009809385168}
   - component: {fileID: 114802540733532566}
   - component: {fileID: 114833218113557316}
   - component: {fileID: 120484769453813390}
+  - component: {fileID: 64668651922812310}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -279,8 +279,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!65 &65480009809385168
-BoxCollider:
+--- !u!64 &64668651922812310
+MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -288,9 +288,11 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!81 &81442496772645454
 AudioListener:
   m_ObjectHideFlags: 1
