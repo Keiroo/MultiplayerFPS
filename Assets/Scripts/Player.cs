@@ -11,6 +11,15 @@ public class Player : NetworkBehaviour {
     private Vector3 shootVector = Vector3.zero;
     private float shootPower = 0f;
     private Rigidbody rb;
+    private int points = 0;
+
+    public int Points
+    {
+        get
+        {
+            return points;
+        }
+    }
 
     private void Start()
     {
@@ -27,7 +36,18 @@ public class Player : NetworkBehaviour {
             Debug.Log(rb.velocity);
             ResetValues();
         }
-    }    
+    }
+    
+    public void AddPoint()
+    {
+        points++;
+        Debug.Log("Point added");
+    }
+
+    public void ResetPoints()
+    {
+        points = 0;
+    }
 
     public void GetShot(Vector3 shootVector, float shootPower)
     {

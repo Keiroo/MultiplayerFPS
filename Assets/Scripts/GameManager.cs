@@ -7,7 +7,37 @@ public class GameManager : MonoBehaviour {
 
     private const string PLAYER_PREFIX = "Player";
 
+    [SerializeField]
+    private int pointsToWin = 100;
+    [SerializeField]
+    private float pointsGainSpeed = 1f;
+
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+    private static GameManager instance;
+    private GameManager() { }
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null) instance = new GameManager();
+            return instance;
+        }
+    }
+    public int PointsToWin
+    {
+        get
+        {
+            return pointsToWin;
+        }
+    }
+    public float PointsGainSpeed
+    {
+        get
+        {
+            return pointsGainSpeed;
+        }
+    }
 
     public static void AddPlayer(string netID, Player player)
     {
@@ -32,7 +62,7 @@ public class GameManager : MonoBehaviour {
         GUILayout.BeginVertical();
         foreach(string playerID in players.Keys)
         {
-            GUILayout.Label(playerID + " | " + players[playerID].transform.name);
+            GUILayout.Label(playerID + " | " + players[playerID].Points);
         }
         GUILayout.EndVertical();
         GUILayout.EndArea();
