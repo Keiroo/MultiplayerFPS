@@ -352,10 +352,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a084a7f46e47b446a2e56d512352ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Components:
+  RemoteComponents:
   - {fileID: 114040255767514414}
   - {fileID: 20270481772004540}
   - {fileID: 81442496772645454}
+  - {fileID: 114748705864244028}
+  - {fileID: 114802540733532566}
+  LocalComponents:
+  - {fileID: 114040255767514414}
   - {fileID: 114748705864244028}
   - {fileID: 114802540733532566}
 --- !u!114 &114748705864244028
@@ -438,7 +442,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f25b98f37255b45817015109f42e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netManager: {fileID: 0}
+  minHeight: -30
+  respawnX: 100
+  respawnY: 2
+  respawnZ: 100
+  IsReady: 0
 --- !u!114 &114912036837879688
 MonoBehaviour:
   m_ObjectHideFlags: 1

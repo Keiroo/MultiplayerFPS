@@ -5,15 +5,18 @@ using UnityEngine.Networking;
 public class PlayerSetup : NetworkBehaviour {
 
     [SerializeField]
-    Behaviour[] Components;
-    GameObject MainCamera;
+    private Behaviour[] RemoteComponents;
+    [SerializeField]
+    private Behaviour[] LocalComponents;
+
+    private GameObject MainCamera;
 
     private void Start()
     {
         if (!isLocalPlayer)
         {
             // Disable all remote player components
-            foreach (Behaviour component in Components)
+            foreach (Behaviour component in RemoteComponents)
             {
                 component.enabled = false;
             }
@@ -27,10 +30,26 @@ public class PlayerSetup : NetworkBehaviour {
             if (MainCamera != null)
             {
                 MainCamera.SetActive(false);
-            }            
-        }
+            }
 
-        
+            if (!GameManager.MatchStarted)
+            {
+                // Disable all local player components on the start
+                foreach (Behaviour component in LocalComponents)
+                {
+                    component.enabled = false;
+                }
+            }
+            
+        }
+    }
+
+    public void EnableLocalComponents()
+    {
+        foreach (Behaviour component in LocalComponents)
+        {
+            component.enabled = true;
+        }
     }
 
     public override void OnStartClient()

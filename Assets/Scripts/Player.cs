@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(PlayerSetup))]
 [RequireComponent(typeof(Rigidbody))]
 public class Player : NetworkBehaviour {
 
@@ -34,10 +35,14 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    public bool IsReady = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         respawnPoint = new Vector3(respawnX, respawnY, respawnZ);
+
+        if (GameManager.MatchStarted) IsReady = true;
     }
 
     private void Update()
