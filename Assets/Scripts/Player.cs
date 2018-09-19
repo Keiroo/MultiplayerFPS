@@ -17,11 +17,13 @@ public class Player : NetworkBehaviour {
     [SerializeField]
     private float respawnZ = 100f;
 
+    [SyncVar]
+    private int points = 0;
+
     private bool gotShot = false;
     private Vector3 shootVector = Vector3.zero;
     private float shootPower = 0f;
     private Rigidbody rb;
-    private int points = 0;
     private Vector3 respawnPoint;
 
     public int Points
