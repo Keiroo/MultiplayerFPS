@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour {
     private int pointsToWin = 100;
     [SerializeField]
     private float pointsGainSpeed = 1f;
-    [SerializeField]
-    private GameObject spawns;
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
     private static GameManager instance;
@@ -37,18 +35,6 @@ public class GameManager : MonoBehaviour {
         get
         {
             return pointsGainSpeed;
-        }
-    }
-    public List<Transform> Spawns { get; private set; }
-
-    private void Awake()
-    {
-        Spawns = new List<Transform>();
-        
-        foreach (Transform child in spawns.transform)
-        {
-            Debug.Log("Adding child");
-            Spawns.Add(child);
         }
     }
 
