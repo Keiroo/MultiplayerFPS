@@ -7,13 +7,22 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : NetworkBehaviour {
 
+    [Header("Respawn settings")]
+    [SerializeField]
+    private float minHeight = -30f;
+    [SerializeField]
+    private float respawnX = 100f;
+    [SerializeField]
+    private float respawnY = 2f;
+    [SerializeField]
+    private float respawnZ = 100f;
+
     private bool gotShot = false;
     private Vector3 shootVector = Vector3.zero;
     private float shootPower = 0f;
     private Rigidbody rb;
     private int points = 0;
-    private GameObject netManager;
-    private List<GameObject> spawnPoints;
+    private Vector3 respawnPoint;
 
     public int Points
     {
@@ -26,15 +35,12 @@ public class Player : NetworkBehaviour {
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        netManager = GameManager.Instance.Spawns;
-        spawnPoints = new List<GameObject>();
-        StartCoroutine(LateStart(1f));
+        respawnPoint = new Vector3(respawnX, respawnY, respawnZ);
     }
 
     private void Update()
     {
-        if (transform.position.y < -10f)
+        if (transform.position.y < minHeight)
             ResetPlayerPos();
     }
 
@@ -77,35 +83,8 @@ public class Player : NetworkBehaviour {
 
     private void ResetPlayerPos()
     {
-        bool spawnFound = false;
-        int spawnID = 0;
-
-        if (spawnPoints.Count > 0)
-        {
-            Debug.Log("Spawns more than 0");
-            do
-            {
-                spawnID = UnityEngine.Random.Range(0, spawnPoints.Count);
-                spawnFound = true;
-                List<Player> players = GameManager.GetPlayers();
-
-                foreach (Player player in players)
-                {
-                    if (player.transform.position == spawnPoints[spawnID].transform.position)
-                    {
-                        spawnFound = false;
-                    }
-                }
-            } while (!spawnFound);
-        }
-        
-        if (spawnFound)
-        {
-            Debug.Log("Resetting position");
-            rb.velocity = Vector3.zero;
-            transform.position = spawnPoints[spawnID].transform.position;
-        }
-
+        rb.velocity = Vector3.zero;
+        transform.position = respawnPoint;
     }
 
     private void ResetValues()
@@ -113,23 +92,5 @@ public class Player : NetworkBehaviour {
         gotShot = false;
         shootVector = Vector3.zero;
         shootPower = 0f;
-    }
-
-    IEnumerator LateStart(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-
-        if (netManager != null)
-        {
-            Debug.Log("NM found");
-            foreach (Transform child in netManager.transform)
-            {
-                spawnPoints.Add(child.gameObject);
-            }
-        }
-        else
-        {
-            Debug.Log("NM not found");
-        }
     }
 }

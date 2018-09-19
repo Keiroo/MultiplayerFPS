@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour {
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
     private static GameManager instance;
-    private GameManager() { }
 
     public static GameManager Instance
     {
@@ -40,13 +39,16 @@ public class GameManager : MonoBehaviour {
             return pointsGainSpeed;
         }
     }
-    public GameObject Spawns
+    public List<Transform> Spawns { get; private set; }
+
+    private void Awake()
     {
-        get
+        Spawns = new List<Transform>();
+        
+        foreach (Transform child in spawns.transform)
         {
-            Debug.Log("Returning NM");
-            Debug.Log(spawns);
-            return spawns;
+            Debug.Log("Adding child");
+            Spawns.Add(child);
         }
     }
 
