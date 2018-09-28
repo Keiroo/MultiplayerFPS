@@ -24,14 +24,7 @@ public class UI : MonoBehaviour {
             else readyButton.SetActive(false);
         }
 
-        // Find local player object
-        foreach (Player player in GameManager.GetPlayers())
-        {
-            if (player.GetComponent<PlayerSetup>().isLocalPlayer)
-            {
-                localPlayer = player;
-            }
-        }
+        StartCoroutine(FindLocalPlayer());
     }
 
     private void Update()
@@ -61,5 +54,22 @@ public class UI : MonoBehaviour {
             }
             readyButton.GetComponent<Button>().colors = cb;
         }
+    }
+
+    private IEnumerator FindLocalPlayer()
+    {
+        do
+        {
+            // Find local player object
+            foreach (Player player in GameManager.GetPlayers())
+            {
+                if (player.GetComponent<PlayerSetup>().isLocalPlayer)
+                {
+                    localPlayer = player;
+                }
+                Debug.Log(localPlayer);
+            }
+            yield return null;
+        } while (localPlayer == null);
     }
 }
