@@ -13,8 +13,8 @@ public class Objective : MonoBehaviour {
     private void Start()
     {
         players = new List<Player>();
-        pointsToWin = GameManager.Instance.PointsToWin;
-        pointsGainSpeed = GameManager.Instance.PointsGainSpeed;
+        pointsToWin = GameManager.PointsToWin;
+        pointsGainSpeed = GameManager.PointsGainSpeed;
     }
 
     private void Update()

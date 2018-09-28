@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour {
+public class UI : NetworkBehaviour {
 
     [SerializeField]
     private GameObject readyButton;
@@ -23,15 +24,7 @@ public class UI : MonoBehaviour {
                 readyButton.SetActive(true);
             else readyButton.SetActive(false);
         }
-
-        // Find local player object
-        foreach (Player player in GameManager.GetPlayers())
-        {
-            if (player.GetComponent<PlayerSetup>().isLocalPlayer)
-            {
-                localPlayer = player;
-            }
-        }
+        StartCoroutine(FindLocalPlayer());
     }
 
     private void Update()
@@ -48,18 +41,39 @@ public class UI : MonoBehaviour {
         if (!GameManager.MatchStarted &&
             !GameManager.CanStart)
         {
-            ColorBlock cb = readyButton.GetComponent<Button>().colors;
+            Debug.Log("Changing button color");
+            Color cb = readyButton.GetComponent<Image>().color;
             if (!localPlayer.IsReady)
             {
+                Debug.Log("Player was not ready");
                 localPlayer.IsReady = true;
-                cb.normalColor = readyColor;
+                cb = Color.green;
             }
             else
             {
+                Debug.Log("Player was ready");
                 localPlayer.IsReady = false;                
-                cb.normalColor = notReadyColor;
+                cb = Color.red;
             }
-            readyButton.GetComponent<Button>().colors = cb;
+            readyButton.GetComponent<Image>().color = cb;
         }
+    }
+
+    [Client]
+    private IEnumerator FindLocalPlayer()
+    {
+        do
+        {
+            // Find local player object
+            foreach (Player player in GameManager.GetPlayers())
+            {
+                if (player.GetComponent<PlayerSetup>().isLocalPlayer)
+                {
+                    localPlayer = player;
+                }
+                Debug.Log(localPlayer);
+            }
+            yield return null;
+        } while (localPlayer == null);        
     }
 }

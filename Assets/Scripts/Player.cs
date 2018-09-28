@@ -35,6 +35,7 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    [SyncVar]
     public bool IsReady = false;
 
     private void Start()

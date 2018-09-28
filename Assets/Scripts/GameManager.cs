@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : NetworkBehaviour {
 
     private const string PLAYER_PREFIX = "Player";
 
@@ -16,35 +16,13 @@ public class GameManager : MonoBehaviour {
     private float timeToStart = 3f;
     [SerializeField]
     private float minPlayers = 2f;
-
-    [SyncVar]
+    
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-    private static GameManager instance;
     private static bool canStart = false;
     private static bool matchStarted = false;
 
-    public static GameManager Instance
-    {
-        get
-        {
-            if (instance == null) instance = new GameManager();
-            return instance;
-        }
-    }
-    public int PointsToWin
-    {
-        get
-        {
-            return pointsToWin;
-        }
-    }
-    public float PointsGainSpeed
-    {
-        get
-        {
-            return pointsGainSpeed;
-        }
-    }
+    public static int PointsToWin { get; private set; }
+    public static float PointsGainSpeed { get; private set; }
     public static bool MatchStarted
     {
         get
@@ -60,26 +38,17 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    private void Start()
+    {
+        PointsToWin = pointsToWin;
+        PointsGainSpeed = pointsGainSpeed;
+    }
+
     private void Update()
     {
         if (!matchStarted)
         {
-            if (!canStart)
-            {
-                if (players.Count >= minPlayers)
-                {
-                    canStart = true;
-                    foreach (string playerID in players.Keys)
-                    {
-                        if (!players[playerID].IsReady) canStart = false;                        
-                    }
-                }
-
-                if (canStart)
-                {
-                    StartCoroutine(StartMatch());
-                }
-            }
+            CmdCheckIfCanStartMatch();
         }
     }
 
@@ -114,16 +83,66 @@ public class GameManager : MonoBehaviour {
         players.Remove(playerID);
     }
 
-    private IEnumerator StartMatch()
+    [Command]
+    private void CmdCheckIfCanStartMatch()
     {
+        if (!canStart)
+        {
+            if (players.Count >= minPlayers)
+            {
+                canStart = true;
+                foreach (string playerID in players.Keys)
+                {
+                    if (!players[playerID].IsReady) canStart = false;
+                }
+            }
+
+            if (canStart)
+            {
+                CmdStartMatch();
+            }
+        }
+    }
+
+    [Command]
+    private void CmdStartMatch()
+    {
+        Debug.Log("Start match command");
+        // Debug: write players ready state
+        foreach (string playerID in players.Keys)
+        {
+            Debug.Log(playerID + " " + players[playerID].IsReady);
+        }
+
+        // First, execute start match on sever
+        StartCoroutine(StartMatchCoroutine());
+        // Then, order clients to do the same
+        RpcStartMatch();
+    }
+
+    [ClientRpc]
+    private void RpcStartMatch()
+    {
+        Debug.Log("Start match RPC");
+        StartCoroutine(StartMatchCoroutine());
+    }
+
+    private IEnumerator StartMatchCoroutine()
+    {
+        Debug.Log("Start match coroutine");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         yield return new WaitForSeconds(timeToStart);
 
-        foreach (string playerID in players.Keys)
+        foreach (string id in players.Keys)
         {
-            players[playerID].GetComponent<PlayerSetup>().EnableLocalComponents();
+            if (players[id].isLocalPlayer)
+            {
+                Debug.Log("localPlayer found");
+                players[id].GetComponent<PlayerSetup>().EnableLocalComponents();
+            }
+                
         }
 
         matchStarted = true;
