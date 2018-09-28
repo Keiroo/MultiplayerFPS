@@ -17,34 +17,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private float minPlayers = 2f;
 
-    [SyncVar]
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-    private static GameManager instance;
     private static bool canStart = false;
     private static bool matchStarted = false;
 
-    public static GameManager Instance
-    {
-        get
-        {
-            if (instance == null) instance = new GameManager();
-            return instance;
-        }
-    }
-    public int PointsToWin
-    {
-        get
-        {
-            return pointsToWin;
-        }
-    }
-    public float PointsGainSpeed
-    {
-        get
-        {
-            return pointsGainSpeed;
-        }
-    }
+    public static int PointsToWin { get; private set; }
+    public static float PointsGainSpeed { get; private set; }
     public static bool MatchStarted
     {
         get
@@ -58,6 +36,12 @@ public class GameManager : MonoBehaviour {
         {
             return canStart;
         }
+    }
+
+    private void Start()
+    {
+        PointsToWin = pointsToWin;
+        PointsGainSpeed = pointsGainSpeed;
     }
 
     private void Update()
