@@ -96,7 +96,8 @@ public class GameManager : NetworkBehaviour {
 
         foreach (string playerID in players.Keys)
         {
-            players[playerID].GetComponent<PlayerSetup>().EnableLocalComponents();
+            if (players[playerID].isLocalPlayer)
+                players[playerID].GetComponent<PlayerSetup>().EnableLocalComponents();
         }
 
         MatchStarted = true;
