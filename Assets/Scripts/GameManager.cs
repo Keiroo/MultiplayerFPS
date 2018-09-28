@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : NetworkBehaviour {
 
     private const string PLAYER_PREFIX = "Player";
 
@@ -18,25 +18,11 @@ public class GameManager : MonoBehaviour {
     private float minPlayers = 2f;
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-    private static bool canStart = false;
-    private static bool matchStarted = false;
 
     public static int PointsToWin { get; private set; }
     public static float PointsGainSpeed { get; private set; }
-    public static bool MatchStarted
-    {
-        get
-        {
-            return matchStarted;
-        }
-    }
-    public static bool CanStart
-    {
-        get
-        {
-            return canStart;
-        }
-    }
+    public static bool MatchStarted { get; private set; }
+    public static bool CanStart { get; private set; }
 
     private void Start()
     {
@@ -46,21 +32,23 @@ public class GameManager : MonoBehaviour {
 
     private void Update()
     {
-        if (!matchStarted)
+        if (!MatchStarted)
         {
-            if (!canStart)
+            if (!CanStart)
             {
                 if (players.Count >= minPlayers)
                 {
-                    canStart = true;
+                    Debug.Log("Enough players to start");
+                    CanStart = true;
                     foreach (string playerID in players.Keys)
                     {
-                        if (!players[playerID].IsReady) canStart = false;                        
+                        if (!players[playerID].IsReady) CanStart = false;                        
                     }
                 }
 
-                if (canStart)
+                if (CanStart)
                 {
+                    Debug.Log("Starting match");
                     StartCoroutine(StartMatch());
                 }
             }
@@ -100,6 +88,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator StartMatch()
     {
+        Debug.Log("Starting match coroutine");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -110,7 +99,7 @@ public class GameManager : MonoBehaviour {
             players[playerID].GetComponent<PlayerSetup>().EnableLocalComponents();
         }
 
-        matchStarted = true;
+        MatchStarted = true;
     }
 
     private void OnGUI()

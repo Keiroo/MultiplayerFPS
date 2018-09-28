@@ -47,12 +47,12 @@ public class UI : MonoBehaviour {
             {
                 if (!localPlayer.IsReady)
                 {
-                    localPlayer.IsReady = true;
+                    localPlayer.CmdPlayerReady(true);
                     cb = readyColor;
                 }
                 else
                 {
-                    localPlayer.IsReady = false;
+                    localPlayer.CmdPlayerReady(false);
                     cb = notReadyColor;
                 }
                 readyButton.GetComponent<Image>().color = cb;

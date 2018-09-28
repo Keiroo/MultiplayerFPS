@@ -35,6 +35,7 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    [SyncVar]
     public bool IsReady = false;
 
     private void Start()
@@ -42,7 +43,12 @@ public class Player : NetworkBehaviour {
         rb = GetComponent<Rigidbody>();
         respawnPoint = new Vector3(respawnX, respawnY, respawnZ);
 
-        if (GameManager.MatchStarted) IsReady = true;
+        if (GameManager.MatchStarted)
+        {
+            if (isLocalPlayer) CmdPlayerReady(true);
+        }
+
+            
     }
 
     private void Update()
@@ -86,6 +92,12 @@ public class Player : NetworkBehaviour {
     public void RpcAddForce(Vector3 force, ForceMode mode)
     {
         rb.AddForce(force, mode);
+    }
+
+    [Command]
+    public void CmdPlayerReady(bool isReady)
+    {
+        IsReady = isReady;
     }
 
     private void ResetPlayerPos()
