@@ -41,18 +41,22 @@ public class UI : MonoBehaviour {
         if (!GameManager.MatchStarted &&
             !GameManager.CanStart)
         {
-            ColorBlock cb = readyButton.GetComponent<Button>().colors;
-            if (!localPlayer.IsReady)
+            Color cb = readyButton.GetComponent<Image>().color;
+
+            if (cb != null)
             {
-                localPlayer.IsReady = true;
-                cb.normalColor = readyColor;
+                if (!localPlayer.IsReady)
+                {
+                    localPlayer.IsReady = true;
+                    cb = readyColor;
+                }
+                else
+                {
+                    localPlayer.IsReady = false;
+                    cb = notReadyColor;
+                }
+                readyButton.GetComponent<Image>().color = cb;
             }
-            else
-            {
-                localPlayer.IsReady = false;                
-                cb.normalColor = notReadyColor;
-            }
-            readyButton.GetComponent<Button>().colors = cb;
         }
     }
 
