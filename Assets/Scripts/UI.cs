@@ -19,6 +19,8 @@ public class UI : MonoBehaviour {
     private string afterStartText;
     [SerializeField]
     private float afterStartTextDuration = 1f;
+    [SerializeField]
+    private string endMatchText;
 
     private Player localPlayer;
     private bool matchStarted;
@@ -62,6 +64,11 @@ public class UI : MonoBehaviour {
                 StartCoroutine(ShowAfterStartText());
             }
         }
+
+        if (GameManager.MatchEnded)
+        {
+            ShowEndMatchText();
+        }
     }
 
     public void OnReadyButtonClick()
@@ -86,6 +93,37 @@ public class UI : MonoBehaviour {
                 readyButton.GetComponent<Image>().color = cb;
             }
         }
+    }
+
+    private void ShowEndMatchText()
+    {
+        startText.GetComponent<Text>().text = endMatchText;
+
+        // Find player with most points
+        List<Player> players = GameManager.GetPlayers();
+        int bestPlayerID = -1;
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (bestPlayerID == -1)
+            {
+                bestPlayerID = i;
+            }
+            else if (players[i].Points > players[bestPlayerID].Points)
+            {
+                bestPlayerID = i;
+            }
+        }
+
+        // If found best player, add score to text
+        if (bestPlayerID != -1)
+        {
+            startText.GetComponent<Text>().text +=
+                "\n Winner: " +
+                players[bestPlayerID].name;
+        }
+
+        startText.SetActive(true);
     }
 
     private void ShowStartingText()

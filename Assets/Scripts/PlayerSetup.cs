@@ -35,12 +35,8 @@ public class PlayerSetup : NetworkBehaviour {
             if (!GameManager.MatchStarted)
             {
                 // Disable all local player components on the start
-                foreach (Behaviour component in LocalComponents)
-                {
-                    component.enabled = false;
-                }
-            }
-            
+                DisableLocalComponents();
+            }            
         }
     }
 
@@ -49,6 +45,14 @@ public class PlayerSetup : NetworkBehaviour {
         foreach (Behaviour component in LocalComponents)
         {
             component.enabled = true;
+        }
+    }
+
+    public void DisableLocalComponents()
+    {
+        foreach (Behaviour component in LocalComponents)
+        {
+            component.enabled = false;
         }
     }
 

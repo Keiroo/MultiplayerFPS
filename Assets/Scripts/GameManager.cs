@@ -16,8 +16,6 @@ public class GameManager : NetworkBehaviour {
     private float timeToStart = 3f;
     [SerializeField]
     private float minPlayers = 2f;
-    [SerializeField]
-    private UI ui;
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
 
@@ -25,35 +23,26 @@ public class GameManager : NetworkBehaviour {
     public static float PointsGainSpeed { get; private set; }
     public static bool MatchStarted { get; private set; }
     public static bool CanStart { get; private set; }
+    public static bool MatchEnded { get; private set; }
 
     private void Start()
     {
         PointsToWin = pointsToWin;
         PointsGainSpeed = pointsGainSpeed;
+        MatchStarted = false;
+        CanStart = false;
+        MatchEnded = false;
     }
 
     private void Update()
     {
         if (!MatchStarted)
         {
-            if (!CanStart)
-            {
-                if (players.Count >= minPlayers)
-                {
-                    Debug.Log("Enough players to start");
-                    CanStart = true;
-                    foreach (string playerID in players.Keys)
-                    {
-                        if (!players[playerID].IsReady) CanStart = false;                        
-                    }
-                }
-
-                if (CanStart)
-                {
-                    Debug.Log("Starting match");
-                    StartCoroutine(StartMatch());
-                }
-            }
+            StartMatchLogic();
+        }
+        else
+        {
+            EndMatchLogic();
         }
     }
 
@@ -86,6 +75,46 @@ public class GameManager : NetworkBehaviour {
     public static void DeletePlayer(string playerID)
     {
         players.Remove(playerID);
+    }
+
+    private void EndMatchLogic()
+    {
+        foreach (string playerID in players.Keys)
+        {
+            if (players[playerID].Points >= PointsToWin)
+            {
+                MatchEnded = true;
+
+                // Find local player and disable local components
+                foreach (string ID in players.Keys)
+                {
+                    if (players[ID].isLocalPlayer)
+                        players[ID].GetComponent<PlayerSetup>().DisableLocalComponents();
+                }
+            }
+        }
+    }
+
+    private void StartMatchLogic()
+    {
+        if (!CanStart)
+        {
+            if (players.Count >= minPlayers)
+            {
+                Debug.Log("Enough players to start");
+                CanStart = true;
+                foreach (string playerID in players.Keys)
+                {
+                    if (!players[playerID].IsReady) CanStart = false;
+                }
+            }
+
+            if (CanStart)
+            {
+                Debug.Log("Starting match");
+                StartCoroutine(StartMatch());
+            }
+        }
     }
 
     private IEnumerator StartMatch()

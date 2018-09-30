@@ -19,18 +19,21 @@ public class Objective : MonoBehaviour {
 
     private void Update()
     {
-        if (players.Count == 1)
+        if (!GameManager.MatchEnded)
         {
-            Debug.Log("One player detected");
-            timer += Time.deltaTime;
-            if (timer > pointsGainSpeed)
+            if (players.Count == 1)
             {
-                Debug.Log("Adding point");
-                players.First().AddPoint();
-                timer = 0f;
-            }                
-        }
-        else timer = 0f;
+                Debug.Log("One player detected");
+                timer += Time.deltaTime;
+                if (timer > pointsGainSpeed)
+                {
+                    Debug.Log("Adding point");
+                    players.First().AddPoint();
+                    timer = 0f;
+                }
+            }
+            else timer = 0f;
+        }        
     }
 
     private void OnTriggerEnter(Collider other)
