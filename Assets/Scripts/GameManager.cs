@@ -16,6 +16,8 @@ public class GameManager : NetworkBehaviour {
     private float timeToStart = 3f;
     [SerializeField]
     private float minPlayers = 2f;
+    [SerializeField]
+    private UI ui;
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
 

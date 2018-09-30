@@ -11,16 +11,28 @@ public class UI : MonoBehaviour {
     private Color readyColor;
     [SerializeField]
     private Color notReadyColor;
+    [SerializeField]
+    private GameObject startText;
+    [SerializeField]
+    private string startingText;
+    [SerializeField]
+    private string afterStartText;
+    [SerializeField]
+    private float afterStartTextDuration = 1f;
 
     private Player localPlayer;
+    private bool matchStarted;
 
     private void Start()
     {
+        // Check if joined to started match
+        if (GameManager.MatchStarted) matchStarted = true;
+        else matchStarted = false;
+
         // Enable ready button if match hasn't started
         if (readyButton != null)
         {
-            if (!GameManager.MatchStarted)
-                readyButton.SetActive(true);
+            if (!matchStarted) readyButton.SetActive(true);
             else readyButton.SetActive(false);
         }
 
@@ -29,10 +41,26 @@ public class UI : MonoBehaviour {
 
     private void Update()
     {
-        // If match started or can start, disable ready button
-        if (GameManager.MatchStarted || GameManager.CanStart)
+        // If joined to not started match, enable button and text
+        if (!matchStarted)
         {
-            readyButton.SetActive(false);
+            // If match started or can start, disable ready button
+            if (GameManager.MatchStarted || GameManager.CanStart)
+            {
+                readyButton.SetActive(false);
+            }
+
+            // If match is starting, show startingText
+            if (GameManager.CanStart)
+            {
+                ShowStartingText();
+            }
+
+            // If match started, show afterStartText
+            if (GameManager.MatchStarted)
+            {
+                StartCoroutine(ShowAfterStartText());
+            }
         }
     }
 
@@ -58,6 +86,23 @@ public class UI : MonoBehaviour {
                 readyButton.GetComponent<Image>().color = cb;
             }
         }
+    }
+
+    private void ShowStartingText()
+    {
+        startText.GetComponent<Text>().text = startingText;
+        startText.SetActive(true);
+    }
+
+    private IEnumerator ShowAfterStartText()
+    {
+        startText.GetComponent<Text>().text = afterStartText;
+        startText.SetActive(true);
+        yield return new WaitForSeconds(afterStartTextDuration);
+        startText.SetActive(false);
+
+        // Disable unnecessary if checks in Update()
+        matchStarted = true;
     }
 
     private IEnumerator FindLocalPlayer()
